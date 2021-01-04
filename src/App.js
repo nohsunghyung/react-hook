@@ -1,24 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useCallback } from "react";
+import Container from "./components/Container";
+import InsertForm from "./components/InsertForm";
+import TodoList from "./components/TodoList";
 
 function App() {
+  const makeTodos = useCallback(() => {
+    let todos = [];
+    for (let i = 0; i < 5; i++) {
+      todos.push({ id: i, text: `할일-${i}`, isComplete: false });
+    }
+    return todos;
+  }, []);
+
+  const [todos, setTodos] = useState(makeTodos);
+  const onChangeComplete = (e, id) => {
+    const checked = e.target.checked;
+    const newTodos = todos.map((info) =>
+      info.id === id ? { ...info, isComplete: !info.isComplete } : info
+    );
+    console.log(newTodos);
+    setTodos(newTodos);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <div className="wrapper">
+        <header>TodoList</header>
+        <div className="content">
+          <InsertForm />
+          <TodoList todos={todos} onChangeComplete={onChangeComplete} />
+        </div>
+      </div>
+    </Container>
   );
 }
 
