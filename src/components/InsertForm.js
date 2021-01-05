@@ -1,12 +1,15 @@
 import React from "react";
 
-function InsertForm() {
+function InsertForm({ value, onChange, addTodo }) {
+  console.log("InsertForm 렌더");
   return (
     <div className="insert">
-      <input type="text" />
-      <button>등록</button>
+      <form onSubmit={addTodo}>
+        <input type="text" onChange={onChange} value={value} />
+        <button>등록</button>
+      </form>
     </div>
   );
 }
 
-export default InsertForm;
+export default React.memo(InsertForm);

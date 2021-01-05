@@ -1,23 +1,24 @@
 import React from "react";
 
-function TodoItem({ info, onChangeComplete }) {
+function TodoItem({ info, onChangeComplete, onRemove }) {
   const { id, text, isComplete } = info;
+  console.log("TodoItem 렌더");
   return (
-    <li className="list-item" className={isComplete ? "active" : ""}>
+    <li className={isComplete ? "list-item active" : "list-item"}>
       <div className="text">{text}</div>
       <div className="checked">
         <input
           type="checkbox"
           id={`chk-${id}`}
-          onChange={(e) => onChangeComplete(e, id)}
+          onChange={() => onChangeComplete(id)}
         />
       </div>
       <div className="button">
         <button>수정</button>
-        <button>삭제</button>
+        <button onClick={() => onRemove(id)}>삭제</button>
       </div>
     </li>
   );
 }
 
-export default TodoItem;
+export default React.memo(TodoItem);
