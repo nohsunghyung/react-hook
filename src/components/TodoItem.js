@@ -1,11 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 
-function TodoItem({ info, onChangeComplete, onRemove }) {
-  const { id, text, isComplete } = info;
+function TodoItem({
+  info,
+  onChangeComplete,
+  onRemove,
+  updateToggle,
+  updateTodo,
+}) {
+  const { id, text, isComplete, isUpdate } = info;
+  const [inputValue, setInputValue] = useState("");
+  const onChangeToggle = () => {
+    updateToggle(id);
+    setInputValue(text);
+  };
+  const onChangeValue = (e) => {
+    const value = e.target.value;
+    setInputValue(value);
+  };
   console.log("TodoItem 렌더");
   return (
     <li className={isComplete ? "list-item active" : "list-item"}>
-      <div className="text">{text}</div>
+      <div className="text">
+        {isUpdate ? (
+          <input
+            type="text"
+            placeholder="todo를 적어주세요"
+            value={inputValue}
+            onChange={onChangeValue}
+          />
+        ) : (
+          text
+        )}
+      </div>
       <div className="checked">
         <input
           type="checkbox"
@@ -13,10 +39,17 @@ function TodoItem({ info, onChangeComplete, onRemove }) {
           onChange={() => onChangeComplete(id)}
         />
       </div>
-      <div className="button">
-        <button>수정</button>
-        <button onClick={() => onRemove(id)}>삭제</button>
-      </div>
+      {isUpdate ? (
+        <div className="button">
+          <button onClick={() => updateTodo(id, inputValue)}>확인</button>
+          <button onClick={onChangeToggle}>취소</button>
+        </div>
+      ) : (
+        <div className="button">
+          <button onClick={onChangeToggle}>수정</button>
+          <button onClick={() => onRemove(id)}>삭제</button>
+        </div>
+      )}
     </li>
   );
 }
